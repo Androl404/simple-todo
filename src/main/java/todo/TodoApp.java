@@ -1,6 +1,7 @@
 package todo;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.layout.*;
 
@@ -13,6 +14,13 @@ public class TodoApp {
         FillLayout layout = new FillLayout();
         layout.type = SWT.VERTICAL;
         shell.setLayout(layout);
+
+        // Icon
+        Image icon16 = new Image(display, TodoApp.class.getResourceAsStream("/icon/icon16.png"));
+        Image icon32 = new Image(display, TodoApp.class.getResourceAsStream("/icon/icon32.png"));
+        Image icon48 = new Image(display, TodoApp.class.getResourceAsStream("/icon/icon48.png"));
+
+        shell.setImages(new Image[] { icon16, icon32, icon48 });
 
         // Create all of the data for the menu bar
         // Create the accelerators
@@ -72,6 +80,10 @@ public class TodoApp {
                 display.sleep();
             }
         }
+
+        icon16.dispose(); // dispose Image resources explicitly, SWT doesn't GC them
+        icon32.dispose(); // dispose Image resources explicitly, SWT doesn't GC them
+        icon48.dispose(); // dispose Image resources explicitly, SWT doesn't GC them
         display.dispose();
     }
 }
