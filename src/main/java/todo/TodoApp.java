@@ -9,8 +9,10 @@ public class TodoApp {
     public static void main(String[] args) {
         Display display = new Display();
         Shell shell = new Shell(display);
-        shell.setText("Hello SWT");
-        shell.setLayout(new FillLayout());
+        shell.setText("Simple TODO list");
+        FillLayout layout = new FillLayout();
+        layout.type = SWT.VERTICAL;
+        shell.setLayout(layout);
 
         // Create all of the data for the menu bar
         // Create the accelerators
@@ -34,14 +36,37 @@ public class TodoApp {
         myMenuBar.addMenuFromMenuData(shell, data);
 
         // Main button
-        Button button = new Button(shell, SWT.PUSH);
-        button.setText("Click me");
-        button.addListener(SWT.Selection, e -> System.out.println("Clicked!"));
+        // Button button = new Button(shell, SWT.PUSH);
+        // button.setText("Click me");
+        // button.addListener(SWT.Selection, e -> System.out.println("Clicked!"));
+
+        // Main group
+        Group group = new Group(shell, SWT.NONE);
+        group.setText("Tasks");
+        group.setLayout(new FillLayout());
+
+        // Task tree
+        CustomTaskTree taskTree = new CustomTaskTree(group);
+        taskTree.AddColumn("Task", 300);
+        taskTree.AddColumn("Category", 200);
+
+        taskTree.AddRow(taskTree.getTree(), new String[] {"Développer cette application", "Développement"}, false, true);
+        taskTree.AddRow(taskTree.getTree(), new String[] {"Acheter des merdenele", "Nourriture"}, false, true);
+
+        // Action buttons
+        Group actions = new Group(shell, SWT.NONE);
+        actions.setText("Actions");
+        actions.setLayout(new FillLayout());
+
+        Button newTask = new Button(actions, SWT.PUSH);
+        newTask.setText("Create new task");
+        newTask.addListener(SWT.Selection, e -> {taskTree.AddRow(taskTree.getTree(), new String[] {"Nouvelle tâche", "Divers"}, false, true);});
 
         // Create the shell (window)
         shell.setSize(300, 200);
         shell.open();
 
+        // Wait for dispose event
         while (!shell.isDisposed()) {
             if (!display.readAndDispatch()) {
                 display.sleep();
