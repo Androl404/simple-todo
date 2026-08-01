@@ -38,17 +38,19 @@ public class CustomTaskTree {
         nameColumn.setWidth(width);
     }
 
-    public void AddRow(Tree parent, String[] columnLabels, boolean setChecked, boolean setExpanded) {
+    public void AddRow(Tree parent, CustomTask task, boolean setChecked, boolean setExpanded) {
         TreeItem row = new TreeItem(parent, SWT.NONE);
-        row.setText(columnLabels);
+        String[] taskArray = {task.GetTask(), task.GetCategory()};
+        row.setText(taskArray);
         row.setChecked(setChecked);
         row.setExpanded(setExpanded);
         this.Items.add(row);
     }
     
-    public void AddRow(TreeItem parent, String[] columnLabels, boolean setChecked, boolean setExpanded) {
+    public void AddRow(TreeItem parent, CustomTask task, boolean setChecked, boolean setExpanded) {
         TreeItem row = new TreeItem(parent, SWT.NONE);
-        row.setText(columnLabels);
+        String[] taskArray = {task.GetTask(), task.GetCategory()};
+        row.setText(taskArray);
         row.setChecked(setChecked);
         row.setExpanded(setExpanded);
         this.Items.add(row);

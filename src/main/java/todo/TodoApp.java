@@ -11,9 +11,10 @@ public class TodoApp {
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setText("Simple TODO list");
-        FillLayout layout = new FillLayout();
-        layout.type = SWT.VERTICAL;
-        shell.setLayout(layout);
+
+        // Shell layout: 1 column, children stacked vertically
+        GridLayout shellLayout = new GridLayout(1, false);
+        shell.setLayout(shellLayout);
 
         // Icon
         Image icon16 = new Image(display, TodoApp.class.getResourceAsStream("/icon/icon16.png"));
@@ -43,32 +44,36 @@ public class TodoApp {
         CustomMenuBar myMenuBar = new CustomMenuBar(shell);
         myMenuBar.addMenuFromMenuData(shell, data);
 
-        // Main button
-        // Button button = new Button(shell, SWT.PUSH);
-        // button.setText("Click me");
-        // button.addListener(SWT.Selection, e -> System.out.println("Clicked!"));
-
-        // Main group
+        // Main group (task tree) — grows to fill remaining space
         Group group = new Group(shell, SWT.NONE);
         group.setText("Tasks");
         group.setLayout(new FillLayout());
+        group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-        // Task tree
+        // Actually create the tasks
+        CustomTask firstTask = new CustomTask("Développer cette application", "Développement");
+        CustomTask secondTask = new CustomTask("Acheter des merdenele", "Nourriture");
+
         CustomTaskTree taskTree = new CustomTaskTree(group);
         taskTree.AddColumn("Task", 300);
         taskTree.AddColumn("Category", 200);
+        taskTree.AddRow(taskTree.getTree(), firstTask, false, true);
+        taskTree.AddRow(taskTree.getTree(), secondTask, false, true);
 
-        taskTree.AddRow(taskTree.getTree(), new String[] {"Développer cette application", "Développement"}, false, true);
-        taskTree.AddRow(taskTree.getTree(), new String[] {"Acheter des merdenele", "Nourriture"}, false, true);
-
-        // Action buttons
+        // Action buttons — only takes the height it needs
         Group actions = new Group(shell, SWT.NONE);
         actions.setText("Actions");
-        actions.setLayout(new FillLayout());
+        actions.setLayout(new FillLayout(SWT.HORIZONTAL));
+        actions.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false));
 
-        Button newTask = new Button(actions, SWT.PUSH);
-        newTask.setText("Create new task");
-        newTask.addListener(SWT.Selection, e -> {taskTree.AddRow(taskTree.getTree(), new String[] {"Nouvelle tâche", "Divers"}, false, true);});
+        Button newTaskButton = new Button(actions, SWT.PUSH);
+        newTaskButton.setText("Create new task");
+        newTaskButton.addListener(SWT.Selection, e -> {
+            CustomTask newTask = TaskEditor.GetNewTask(display, shell);
+            if (newTask != null) {
+                taskTree.AddRow(taskTree.getTree(), newTask, false, true);
+            }
+        });
 
         // Create the shell (window)
         shell.setSize(300, 200);
