@@ -75,6 +75,16 @@ public class TodoApp {
             }
         });
 
+        Button deleteTaskButton = new Button(actions, SWT.PUSH);
+        deleteTaskButton.setText("Delete task");
+        deleteTaskButton.addListener(SWT.Selection, e -> {
+                TreeItem[] items = taskTree.getTree().getSelection();
+                for (TreeItem item : items) {
+                    item.dispose();
+                }
+        });
+
+
         // Create the shell (window)
         shell.setSize(300, 200);
         shell.open();
